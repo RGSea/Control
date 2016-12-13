@@ -2,19 +2,15 @@
  Robert Gordon's College ROV Dualshock 4 Test Code
 
  Created 13 December 2016
+ THIS TEST REQUIRES NOT GATES
  */
 
 const float deadZone = 0.05; // range to which no input is read
-const int controlPin1 = 2; // connected to pin 7 on the H-bridge
-const int controlPin2 = 3; // connected to pin 2 on the H-bridge
-const int enablePin = 9;   // connected to pin 1 on the H-bridge
+const int controlPin1 = 2; // connected to Log1,3 & !Log2,4 on the H-bridge
+const int enablePin = 9;   // connected to En1,2 on the H-bridge
 
 // create some variables to hold values from your inputs
 int calcValue = 0;
-int onOffSwitchState = 0;  // current state of the On/Off switch
-int previousOnOffSwitchState = 0; // previous position of the on/off switch
-int directionSwitchState = 0;  // current state of the direction switch
-int previousDirectionSwitchState = 0;  // previous state of the direction switch
 
 int motorSpeed = 0; // speed of the motor
 int motorDirection = 1; // current direction of the motor
@@ -37,7 +33,6 @@ int inc = 0;
 void setup() {
   // intialize the inputs and outputs
   pinMode(controlPin1, OUTPUT);
-  pinMode(controlPin2, OUTPUT);
   pinMode(enablePin, OUTPUT);
   // pull the enable pin LOW to start
   digitalWrite(enablePin, LOW);
@@ -100,15 +95,12 @@ void loop() {
     if (motorDirection == 1) {
       Serial.print("forward\n");
       digitalWrite(controlPin1, HIGH);
-      digitalWrite(controlPin2, LOW);
     } else if (motorDirection == -1) {
       Serial.print("backward\n");
       digitalWrite(controlPin1, LOW);
-      digitalWrite(controlPin2, HIGH);
     } else {
       Serial.print("neutral\n");
       digitalWrite(controlPin1, LOW);
-      digitalWrite(controlPin2, LOW);
     }
     analogWrite(enablePin, 0);
     
