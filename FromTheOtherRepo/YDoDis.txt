@@ -1,0 +1,2 @@
+This stuff should get phased out sooner or later.
+Just moved it here because swapping repos is too much effort.
