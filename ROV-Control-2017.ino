@@ -171,48 +171,9 @@ void loop() {
   delay(1);
   Usb.Task();
   if (PS4.connected()) {
+    //check for gyro correction
 
 
-    //get input
-    zTranslationInput = (float)(PS4.getAnalogHat(LeftHatY)) / 128.0 - 0.5;
-    xTranslationInput = (float)(PS4.getAnalogHat(LeftHatX)) / 128.0 - 0.5;
-
-    xRotationInput = (float)(PS4.getAnalogHat(RightHatY)) / 128.0 - 0.5;
-
-    if (PS4.getButtonClick(R3)) {
-      yRotationInput = 0.0;
-      zRotationInput = (float)(PS4.getAnalogHat(RightHatX)) / 128.0 - 0.5; //but could be the  x translation
-    } else {
-      yRotationInput = (float)(PS4.getAnalogHat(RightHatX)) / 128.0 - 0.5; //but could be the  x translation
-      zRotationInput = 0.0;
-    }
-
-    // up down
-    yTranslationInput = ((float)PS4.getAnalogButton(R2) / 255.0 + (float)PS4.getAnalogButton(L2) / 255.0) / 2.0 - 1.0;
-
-
-
-    //deadzone snapping
-    if (zTranslationInput < deadZoneBuffer && zTranslationInput > -deadZoneBuffer) {
-      zTranslationInput = 0.0;
-    }
-    if (zRotationInput < deadZoneBuffer && zRotationInput > -deadZoneBuffer) {
-      zRotationInput = 0.0;
-    }
-    if (xTranslationInput < deadZoneBuffer && xTranslationInput > -deadZoneBuffer) {
-      xTranslationInput = 0.0;
-    }
-    if (xRotationInput < deadZoneBuffer && xRotationInput > -deadZoneBuffer) {
-      xRotationInput = 0.0;
-    }
-    if (yTranslationInput < deadZoneBuffer && yTranslationInput > -deadZoneBuffer) {
-      yTranslationInput = 0.0;
-    }
-    if (yRotationInput < deadZoneBuffer && yRotationInput > -deadZoneBuffer) {
-      yRotationInput = 0.0;
-    }
-
-    ///gyro and grabber stuff
     if (PS4.getButtonClick(CROSS)) {
       Serial.print(F("\r\nCross"));
       PS4.setLedFlash(10, 10); // Set it to blink rapidly
@@ -240,7 +201,49 @@ void loop() {
       yTranslationInput = 0;
       zTranslationInput = 0;
 
-    } 
+    } else {
+
+      //get input
+      zTranslationInput = (float)(PS4.getAnalogHat(LeftHatY)) / 128.0 - 0.5;
+      xTranslationInput = (float)(PS4.getAnalogHat(LeftHatX)) / 128.0 - 0.5;
+
+      xRotationInput = (float)(PS4.getAnalogHat(RightHatY)) / 128.0 - 0.5;
+
+      if (PS4.getButtonClick(R3)) {
+        yRotationInput = 0.0;
+        zRotationInput = (float)(PS4.getAnalogHat(RightHatX)) / 128.0 - 0.5; //but could be the  x translation
+      } else {
+        yRotationInput = (float)(PS4.getAnalogHat(RightHatX)) / 128.0 - 0.5; //but could be the  x translation
+        zRotationInput = 0.0;
+      }
+
+      // up down
+      yTranslationInput = ((float)PS4.getAnalogButton(R2) / 255.0 + (float)PS4.getAnalogButton(L2) / 255.0) / 2.0 - 1.0;
+
+
+
+      //deadzone snapping
+      if (zTranslationInput < deadZoneBuffer && zTranslationInput > -deadZoneBuffer) {
+        zTranslationInput = 0.0;
+      }
+      if (zRotationInput < deadZoneBuffer && zRotationInput > -deadZoneBuffer) {
+        zRotationInput = 0.0;
+      }
+      if (xTranslationInput < deadZoneBuffer && xTranslationInput > -deadZoneBuffer) {
+        xTranslationInput = 0.0;
+      }
+      if (xRotationInput < deadZoneBuffer && xRotationInput > -deadZoneBuffer) {
+        xRotationInput = 0.0;
+      }
+      if (yTranslationInput < deadZoneBuffer && yTranslationInput > -deadZoneBuffer) {
+        yTranslationInput = 0.0;
+      }
+      if (yRotationInput < deadZoneBuffer && yRotationInput > -deadZoneBuffer) {
+        yRotationInput = 0.0;
+      }
+    }
+    ///gyro and grabber stuff
+
     if (PS4.getButtonClick(UP)) {
       Serial.print(F("\r\nUp"));
       PS4.setLed(Red);
@@ -254,7 +257,7 @@ void loop() {
       Serial.print(F("\r\nLeft"));
       PS4.setLed(Green);
     }
-    
+
     //get gyro data
     read_mpu_6050_data();                                                //Read the raw acc and gyro data from the MPU-6050
 
