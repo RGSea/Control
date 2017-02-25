@@ -65,9 +65,10 @@ enum MotorPWM { //change CHNAGE MAN CHANGE AAAAA
 
 float motorDirections[8];
 
+int grabberPin;
+int grabberRotatePin;
 
-
-
+bool deltaGrabber;
 
 //  DIAGRAM OF JOYSTICK
 //       +1
@@ -100,6 +101,7 @@ float angle_pitch_output, angle_roll_output;
 
 
 void setup() {
+  deltaGrabber = false;
   // put your setup code here, to run once:
   Serial.begin(115200);
   //start up PS4 input
@@ -160,6 +162,11 @@ void setup() {
   pinMode(MotorPWM_FrontRightMotor, OUTPUT);
   pinMode(MotorPWM_BackMotor, OUTPUT);
   pinMode(MotorPWM_BackMotor, OUTPUT);
+
+
+  pinMode(grabberPin, OUTPUT);
+  pinMode(grabberRotatePin, OUTPUT); //still need to add code to make it rotate
+
 
 }
 
@@ -244,18 +251,17 @@ void loop() {
     }
     ///gyro and grabber stuff
 
-    if (PS4.getButtonClick(UP)) {
-      Serial.print(F("\r\nUp"));
-      PS4.setLed(Red);
-    } if (PS4.getButtonClick(RIGHT)) {
-      Serial.print(F("\r\nRight"));
-      PS4.setLed(Blue);
-    } if (PS4.getButtonClick(DOWN)) {
-      Serial.print(F("\r\nDown"));
-      PS4.setLed(Yellow);
-    } if (PS4.getButtonClick(LEFT)) {
-      Serial.print(F("\r\nLeft"));
-      PS4.setLed(Green);
+    //grab
+    if (PS4.getButtonClick(DOWN)) {
+      if (deltaGrabber == false) {
+        digitalWrite(grabberPin, HIGH);
+      }
+      deltaGrabber = true;
+    } else {
+      if (deltaGrabber == true) {
+        digitalWrite(grabberPin, LOW);
+      }
+      deltaGrabber = false;
     }
 
     //get gyro data
